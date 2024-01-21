@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('task')->nullable();
+            $table->string('description')->nullable();
             $table->enum('status',['todo', 'in progress', 'completed'])->default('todo');
             $table->timestamps();
 
