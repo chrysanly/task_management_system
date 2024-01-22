@@ -17,8 +17,9 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        User::factory()->create();
         return [
-            'user_id' => User::first()->id,
+            'user_id' => User::inRandomOrder()->first()->id,
             'description' => fake()->sentence(3),
             'status' => fake()->randomElement(['todo', 'in progress', 'completed']),
         ];

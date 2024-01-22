@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('sub_tasks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('description')->nullable();
-            $table->enum('status',['todo', 'in progress', 'completed'])->default('todo');
+            $table->unsignedBigInteger('task_id');
+            $table->string('description');
+            $table->enum('status', ['todo', 'in progress', 'completed'])->default('todo');
             $table->timestamps();
 
-            $table->softDeletes();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('sub_tasks');
     }
 };
