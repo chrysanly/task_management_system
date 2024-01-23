@@ -61,14 +61,14 @@
                         <div class="mb-3">
                             <label for="description" class="form-label">Attached Image</label>
                             <div class="input-group mb-3 col-md-6 col-sm-12">
-                                <input type="file" class="form-control" id="inputGroupFile02" name="files[]" multiple>
-                                {{-- <label class="input-group-text" for="inputGroupFile02">Upload</label> --}}
+                                <input type="file" class="form-control @error('files') is-invalid @enderror" id="inputGroupFile02" name="files[]"
+                                    multiple>
+                                @error('files')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
-                            @error('description')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
                         </div>
                         <button type="submit"
                             class="btn btn-outline-primary float-end">{{ $method === 'POST' ? 'Submit' : 'Update' }}</button>
@@ -78,29 +78,30 @@
         </div>
     </div>
 
-    @if ($task->files)
+    @if ($method === 'PATCH')
         <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="card">
-                <div class="card-header">
-                    File Uploads
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-evenly overflow-auto">
-                        @forelse ($task->files as $file)
-                            <div class="row">
-                                <img src="{{ asset($file->path) }}" alt="uploaded images" style="width: 150px; height: 150px">
-                            {{-- <a href="#" class="text-sm card-link">Remove</a> --}}
-                            </div>
-                            {{-- <button class="btn btn-sm btn-secondary" style="width: 110px">remove</button> --}}
-                        @empty
-                            No Uploaded Images
-                        @endforelse
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="card">
+                    <div class="card-header">
+                        File Uploads
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-evenly overflow-auto">
+                            @forelse ($task->files as $file)
+                                <div class="row">
+                                    <img src="{{ asset($file->path) }}" alt="uploaded images"
+                                        style="width: 150px; height: 150px">
+                                    {{-- <a href="#" class="text-sm card-link">Remove</a> --}}
+                                </div>
+                                {{-- <button class="btn btn-sm btn-secondary" style="width: 110px">remove</button> --}}
+                            @empty
+                                No Uploaded Images
+                            @endforelse
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
 
 </x-app-layout>
