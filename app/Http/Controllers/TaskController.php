@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Task\CreateRequest;
-use App\Models\SubTask;
 use App\Models\Task;
+use App\Models\SubTask;
+use App\Models\TaskImages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use App\Http\Requests\Task\CreateRequest;
 
 class TaskController extends Controller
 {
@@ -53,6 +55,15 @@ class TaskController extends Controller
         $task->user_id = $userId;
         $task->description = $request->description;
         $task->save();
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $key => $file) {
+                $taskImages = new TaskImages();
+                $taskImages->task_id = $task->id;
+                $taskImages->path = $this->handleUpload($file, 'task/' . $task->id);
+                $taskImages->save();
+            }
+        }
 
         return redirect('/tasks')->with('success', 'Task Created');
     }
@@ -62,6 +73,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $task = Task::with('files')->find($task->id);
         $subtasks = SubTask::where('task_id', $task->id)->orderByDesc('id')->paginate(5);
         return view('tasks.view', [
             'task' => $task,
@@ -89,6 +101,15 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->status = $request->status;
         $task->save();
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $key => $file) {
+                $taskImages = new TaskImages();
+                $taskImages->task_id = $task->id;
+                $taskImages->path = $this->handleUpload($file, 'task/' . $task->id);
+                $taskImages->save();
+            }
+        }
         return redirect('/tasks')->with('success', 'Task Updated');
     }
 
@@ -106,6 +127,10 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $path = public_path('task/' . $task->id);
+        if (File::exists($path)) {
+            File::deleteDirectory($path);
+        }
         $task->delete();
         return redirect('/tasks')->with('success', 'Task Permanently Deleted');
     }

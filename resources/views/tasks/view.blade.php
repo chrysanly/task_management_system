@@ -29,14 +29,14 @@
             </div>
         </div>
     @endif
-    <div class="py-8">
+    <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3">
-                            <label for="task_id" class="form-label">Task ID:</label>
-                            <input class="form-control" value="{{ $task->id }}" disabled>
-                        </div>
+                        <label for="task_id" class="form-label">Task ID:</label>
+                        <input class="form-control" value="{{ $task->id }}" disabled>
+                    </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" id="description" rows="3"
@@ -66,7 +66,30 @@
         </div>
     </div>
 
-    <div class="py-7 mt-4">
+    <div class="py-2">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="card">
+                <div class="card-header">
+                    File Uploads
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-evenly overflow-auto">
+                        @forelse ($task->files as $file)
+                            <div class="row">
+                                <img src="{{ asset($file->path) }}" alt="uploaded images" style="width: 150px; height: 150px">
+                            {{-- <a href="#" class="text-sm card-link">Remove</a> --}}
+                            </div>
+                            {{-- <button class="btn btn-sm btn-secondary" style="width: 110px">remove</button> --}}
+                        @empty
+                            No Uploaded Images
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="card">
                 <div class="card-header">

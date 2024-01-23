@@ -29,7 +29,7 @@ class PermanentDeleteTrashTask extends Command
     {
         $trash = Task::whereNotNull('deleted_at')->get();
         foreach ($trash as $item) {
-            $deleteTime  = \Carbon\Carbon::parse($item->deleted_at)->addMinutes(5);
+            $deleteTime  = \Carbon\Carbon::parse($item->deleted_at)->addDays(30);
             $now = now();
             if ($now >= $deleteTime) {
                $item->delete();

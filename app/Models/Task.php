@@ -16,4 +16,8 @@ class Task extends Model
     {
         return $this->hasMany(SubTask::class);
     }
+    public function files()
+    {
+        return $this->hasMany(TaskImages::class);
+    }
 }
